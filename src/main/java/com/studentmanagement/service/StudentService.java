@@ -1,6 +1,7 @@
 package com.studentmanagement.service;
 
 import com.studentmanagement.entity.Student;
+import com.studentmanagement.exception.StudentNotFoundException;
 import com.studentmanagement.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class StudentService {
 
     public Student findById(int id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student with id " + id + " not found"));
+                .orElseThrow(() -> new StudentNotFoundException("Student with id " + id + " not found"));
     }
 
     public Student save(Student student) {

@@ -21,6 +21,7 @@ public class Student {
     private String lastName;
 
     @Email
+    @NotBlank
     @Column(name = "email")
     private String email;
 
