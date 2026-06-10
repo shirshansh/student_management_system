@@ -4,6 +4,8 @@ import com.studentmanagement.entity.Student;
 import com.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,42 +23,47 @@ public class StudentController {
 
     // GET /api/students
     @GetMapping
-    public List<Student> getStudents() {
-        return studentService.findAll();
+    public ResponseEntity<List<Student>> getStudents() {
+        List<Student> students = studentService.findAll();
+
+        return ResponseEntity.ok(students);
     }
 
     // GET /api/students/{id}
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable int id) {
-        return studentService.findById(id);
+    public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {
+        Student student = studentService.findById(id);
+
+        return ResponseEntity.ok(student);
     }
 
     // POST /api/students
     @PostMapping
-    public Student saveStudent(@Valid @RequestBody Student student) {
+    public ResponseEntity<Student> saveStudent(@Valid @RequestBody Student student) {
         // Force id to null so that save() performs insert
         student.setId(null);
 
-        return studentService.save(student);
+        Student savedStudent = studentService.save(student);
+
+        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
     // PUT /api/students/{id}
     @PutMapping("/{id}")
-    public Student updateStudent(
-            @PathVariable int id,
+    public ResponseEntity<Student> updateStudent(
+            @PathVariable Integer id,
             @Valid @RequestBody Student student) {
 
-        // Verify if the student exists
-        studentService.findById(id);
+        Student updatedStudent = studentService.updateStudent(id, student);
 
-        student.setId(id);
-
-        return studentService.save(student);
+        return ResponseEntity.ok(updatedStudent);
     }
 
     // DELETE /api/students/{id}
     @DeleteMapping("/{id}")
-    public void deleteStudent(@PathVariable int id) {
+    public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
         studentService.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
