@@ -1,51 +1,36 @@
-package com.studentmanagement.entity;
+package com.studentmanagement.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
-@Entity
-@Table(name = "students")
-public class Student {
+public class StudentRequestDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_id")
-    private Integer id;
-
-    @Column(name = "first_name")
+    @NotBlank(message = "First Name is required")
     private String firstName;
 
-    @Column(name = "last_name")
+    @NotBlank(message = "Last Name is required")
     private String lastName;
 
-    @Column(name = "email")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @Column(name = "department")
+    @NotBlank(message = "Department is required")
     private String department;
 
-    @Column(name = "cgpa")
+    @NotNull(message = "CGPA is required")
+    @DecimalMin(value = "0.0", message = "Cannot be less than 0")
+    @DecimalMax(value = "10.0", message = "Cannot be greater than 10")
     private Double cgpa;
 
-    // Constructors
-    public Student() {
+    public StudentRequestDto() {
     }
 
-    public Student(Integer id, String firstName, String lastName, String email, String department, Double cgpa) {
-        this.id = id;
+    public StudentRequestDto(String firstName, String lastName, String email, String department, Double cgpa) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.department = department;
         this.cgpa = cgpa;
-    }
-
-    // Getters and Setters
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -88,12 +73,10 @@ public class Student {
         this.cgpa = cgpa;
     }
 
-    // toString method
     @Override
     public String toString() {
-        return "Student{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
+        return "StudentRequestDto{" +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", department='" + department + '\'' +

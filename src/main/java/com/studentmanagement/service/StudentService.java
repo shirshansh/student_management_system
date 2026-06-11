@@ -1,5 +1,7 @@
 package com.studentmanagement.service;
 
+import com.studentmanagement.dto.StudentRequestDto;
+import com.studentmanagement.dto.StudentResponseDto;
 import com.studentmanagement.entity.Student;
 import com.studentmanagement.exception.StudentNotFoundException;
 import com.studentmanagement.repository.StudentRepository;
@@ -15,22 +17,63 @@ public class StudentService {
 
     @Autowired
     public StudentService(StudentRepository studentRepository) {
+
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> findAll() {
-        return studentRepository.findAll();
+    private Student convertToEntity(StudentRequestDto studentRequestDto) {
+
+        Student student = new Student();
+
+        student.setFirstName(studentRequestDto.getFirstName());
+        student.setLastName(studentRequestDto.getLastName());
+        student.setEmail(studentRequestDto.getEmail());
+        student.setDepartment(studentRequestDto.getDepartment());
+        student.setCgpa(studentRequestDto.getCgpa());
+
+        return student;
     }
 
-    public Student findById(Integer id) {
-        return studentRepository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException("Student with id " + id + " not found"));
+    private StudentResponseDto convertToResponseDto(Student student) {
+
+        StudentResponseDto studentResponseDto = new StudentResponseDto();
+
+        studentResponseDto.setId(student.getId());
+        studentResponseDto.setFirstName(student.getFirstName());
+        studentResponseDto.setLastName(student.getLastName());
+        studentResponseDto.setEmail(student.getEmail());
+        studentResponseDto.setDepartment(student.getDepartment());
+        studentResponseDto.setCgpa(student.getCgpa());
+
+        return studentResponseDto;
     }
 
-    public Student updateStudent(Integer id, Student updatedStudent) {
+    private Student getStudentById(Integer id) {
 
-        Student existingStudent = studentRepository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException("Student not found with id = " + id));
+        return studentRepository
+                .findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student with id = " + id + " not found"));
+    }
+
+    public List<StudentResponseDto> findAll() {
+
+        return studentRepository
+                .findAll()
+                .stream()
+                .map(this::convertToResponseDto)
+                .toList();
+    }
+
+    public StudentResponseDto findById(Integer id) {
+
+        return convertToResponseDto(getStudentById(id));
+    }
+
+    public StudentResponseDto updateStudent(Integer id, StudentRequestDto updatedStudentRequestDto) {
+
+        Student existingStudent = getStudentById(id);
+
+        Student updatedStudent = convertToEntity(updatedStudentRequestDto);
 
         existingStudent.setFirstName(updatedStudent.getFirstName());
         existingStudent.setLastName(updatedStudent.getLastName());
@@ -38,16 +81,21 @@ public class StudentService {
         existingStudent.setDepartment(updatedStudent.getDepartment());
         existingStudent.setCgpa(updatedStudent.getCgpa());
 
-        return studentRepository.save(existingStudent);
+        return convertToResponseDto(studentRepository.save(existingStudent));
     }
 
-    public Student save(Student student) {
-        return studentRepository.save(student);
+    public StudentResponseDto save(StudentRequestDto requestDto) {
+
+        Student student = convertToEntity(requestDto);
+
+        Student savedStudent = studentRepository.save(student);
+
+        return convertToResponseDto(savedStudent);
     }
 
     public void deleteById(Integer id) {
 
-        Student student = findById(id);
+        Student student = getStudentById(id);
 
         studentRepository.delete(student);
     }

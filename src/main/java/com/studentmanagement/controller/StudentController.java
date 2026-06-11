@@ -1,6 +1,7 @@
 package com.studentmanagement.controller;
 
-import com.studentmanagement.entity.Student;
+import com.studentmanagement.dto.StudentRequestDto;
+import com.studentmanagement.dto.StudentResponseDto;
 import com.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,50 +19,52 @@ public class StudentController {
 
     @Autowired
     public StudentController(StudentService studentService) {
+
         this.studentService = studentService;
     }
 
     // GET /api/students
     @GetMapping
-    public ResponseEntity<List<Student>> getStudents() {
-        List<Student> students = studentService.findAll();
+    public ResponseEntity<List<StudentResponseDto>> getStudents() {
+
+        List<StudentResponseDto> students = studentService.findAll();
 
         return ResponseEntity.ok(students);
     }
 
     // GET /api/students/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Integer id) {
-        Student student = studentService.findById(id);
+    public ResponseEntity<StudentResponseDto> getStudentById(@PathVariable Integer id) {
 
-        return ResponseEntity.ok(student);
+        StudentResponseDto studentResponseDto = studentService.findById(id);
+
+        return ResponseEntity.ok(studentResponseDto);
     }
 
     // POST /api/students
     @PostMapping
-    public ResponseEntity<Student> saveStudent(@Valid @RequestBody Student student) {
-        // Force id to null so that save() performs insert
-        student.setId(null);
+    public ResponseEntity<StudentResponseDto> saveStudent(@Valid @RequestBody StudentRequestDto studentRequestDto) {
 
-        Student savedStudent = studentService.save(student);
+        StudentResponseDto savedStudentResponseDto = studentService.save(studentRequestDto);
 
-        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedStudentResponseDto, HttpStatus.CREATED);
     }
 
     // PUT /api/students/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(
+    public ResponseEntity<StudentResponseDto> updateStudent(
             @PathVariable Integer id,
-            @Valid @RequestBody Student student) {
+            @Valid @RequestBody StudentRequestDto studentRequestDto) {
 
-        Student updatedStudent = studentService.updateStudent(id, student);
+        StudentResponseDto updatedStudentResponseDto = studentService.updateStudent(id, studentRequestDto);
 
-        return ResponseEntity.ok(updatedStudent);
+        return ResponseEntity.ok(updatedStudentResponseDto);
     }
 
     // DELETE /api/students/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Integer id) {
+
         studentService.deleteById(id);
 
         return ResponseEntity.noContent().build();
