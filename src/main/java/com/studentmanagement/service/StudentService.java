@@ -77,7 +77,7 @@ public class StudentService {
                     "Invalid sort field: " + sortBy);
         }
 
-        Sort sort = sortOrder.isAscending() ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
+        Sort sort = Sort.by(sortOrder, sortBy);
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
@@ -109,13 +109,11 @@ public class StudentService {
 
         Student existingStudent = getStudentById(id);
 
-        Student updatedStudent = convertToEntity(updatedStudentRequestDto);
-
-        existingStudent.setFirstName(updatedStudent.getFirstName());
-        existingStudent.setLastName(updatedStudent.getLastName());
-        existingStudent.setEmail(updatedStudent.getEmail());
-        existingStudent.setDepartment(updatedStudent.getDepartment());
-        existingStudent.setCgpa(updatedStudent.getCgpa());
+        existingStudent.setFirstName(updatedStudentRequestDto.getFirstName());
+        existingStudent.setLastName(updatedStudentRequestDto.getLastName());
+        existingStudent.setEmail(updatedStudentRequestDto.getEmail());
+        existingStudent.setDepartment(updatedStudentRequestDto.getDepartment());
+        existingStudent.setCgpa(updatedStudentRequestDto.getCgpa());
 
         return convertToResponseDto(studentRepository.save(existingStudent));
     }
@@ -134,5 +132,58 @@ public class StudentService {
         Student student = getStudentById(id);
 
         studentRepository.delete(student);
+    }
+
+    public StudentResponseDto findByEmail(String email) {
+
+        Student student = studentRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new StudentNotFoundException("Student with email = " + email + " not found"));
+
+        return convertToResponseDto(student);
+    }
+
+    public List<StudentResponseDto> findByDepartment(String department) {
+
+        return studentRepository
+                .findByDepartment(department)
+                .stream()
+                .map(this::convertToResponseDto)
+                .toList();
+    }
+
+    public List<StudentResponseDto> searchByFirstName(String keyword) {
+
+        return studentRepository
+                .findByFirstNameContainingIgnoreCase(keyword)
+                .stream()
+                .map(this::convertToResponseDto)
+                .toList();
+    }
+
+    public List<StudentResponseDto> findByCgpa(String comparator, Double cgpa) {
+
+        comparator = comparator.toLowerCase();
+
+        List<Student> students = switch (comparator) {
+            case "gt" -> studentRepository.findByCgpaGreaterThan(cgpa);
+            case "lt" -> studentRepository.findByCgpaLessThan(cgpa);
+            case "eq" -> studentRepository.findByCgpa(cgpa);
+            default -> throw new IllegalArgumentException("Invalid comparator");
+        };
+
+        return students
+                .stream()
+                .map(this::convertToResponseDto)
+                .toList();
+    }
+
+    public List<StudentResponseDto> findByDepartmentAndCgpaGreaterThan(String department, Double cgpa) {
+
+        return studentRepository
+                .findByDepartmentAndCgpaGreaterThan(department, cgpa)
+                .stream()
+                .map(this::convertToResponseDto)
+                .toList();
     }
 }
