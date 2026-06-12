@@ -1,15 +1,14 @@
 package com.studentmanagement.controller;
 
+import com.studentmanagement.dto.StudentPageResponseDto;
 import com.studentmanagement.dto.StudentRequestDto;
 import com.studentmanagement.dto.StudentResponseDto;
 import com.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
@@ -17,19 +16,30 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    @Autowired
     public StudentController(StudentService studentService) {
 
         this.studentService = studentService;
     }
 
-    // GET /api/students
+    // GET /api/students?page={page}&size={size}
     @GetMapping
-    public ResponseEntity<List<StudentResponseDto>> getStudents() {
+    public ResponseEntity<StudentPageResponseDto> getStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") Sort.Direction sortOrder
+    ) {
 
-        List<StudentResponseDto> students = studentService.findAll();
+        StudentPageResponseDto response =
+                studentService
+                        .findAll(
+                                page,
+                                size,
+                                sortBy,
+                                sortOrder
+                        );
 
-        return ResponseEntity.ok(students);
+        return ResponseEntity.ok(response);
     }
 
     // GET /api/students/{id}
