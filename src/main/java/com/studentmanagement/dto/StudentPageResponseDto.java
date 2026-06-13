@@ -1,19 +1,45 @@
 package com.studentmanagement.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
+@Schema(description = "Student Page Response")
 public class StudentPageResponseDto {
 
+    @Schema(
+            description = "List of Student Response"
+    )
     private List<StudentResponseDto> students;
 
+    @Schema(
+            description = "Current Page Number",
+            example = "0"
+    )
     private int currentPage;
 
+    @Schema(
+            description = "Total Number of Pages",
+            example = "3"
+    )
     private int totalPages;
 
+    @Schema(
+            description = "Total Number of Elements",
+            example = "5"
+    )
     private long totalElements;
 
+    @Schema(
+            description = "Is Current Page the First Page?",
+            example = "true"
+    )
     private boolean first;
 
+    @Schema(
+            description = "Is Current Page the Last Page?",
+            example = "false"
+    )
     private boolean last;
 
     public StudentPageResponseDto() {

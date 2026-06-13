@@ -1,19 +1,50 @@
 package com.studentmanagement.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Student Response")
 public class StudentResponseDto {
 
+    @Schema(
+            description = "Student ID",
+            example = "1"
+    )
     private Integer id;
 
+    @Schema(
+            description = "First name",
+            example = "Shim"
+    )
     private String firstName;
 
+    @Schema(
+            description = "Last name",
+            example = "Chan"
+    )
     private String lastName;
 
+    @Schema(
+            description = "Email",
+            example = "shim.chan@college.com"
+    )
     private String email;
 
+    @Schema(
+            description = "Department Name",
+            example = "Computer Science and Engineering"
+    )
     private String departmentName;
 
+    @Schema(
+            description = "CGPA",
+            example = "8.5"
+    )
     private Double cgpa;
 
+    @Schema(
+            description = "Number of Issued Books",
+            example = "3"
+    )
     private Integer issuedBooks;
 
     public StudentResponseDto() {

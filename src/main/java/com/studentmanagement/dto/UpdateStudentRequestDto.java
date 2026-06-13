@@ -1,31 +1,62 @@
 package com.studentmanagement.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
+@Schema(description = "Student Updation Request")
 public class UpdateStudentRequestDto {
 
+    @Schema(
+            description = "First Name",
+            example = "Shim"
+    )
     @NotBlank(message = "First Name is required")
     private String firstName;
 
+    @Schema(
+            description = "Last Name",
+            example = "Chan"
+    )
     @NotBlank(message = "Last Name is required")
     private String lastName;
 
+    @Schema(
+            description = "Email",
+            example = "shim.chan@college.com"
+    )
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
 
+    @Schema(
+            description = "Department ID",
+            example = "1"
+    )
     @NotNull(message = "Department ID is required")
+    @Min(value = 1, message = "Department ID cannot be less than 1")
     private Integer departmentId;
 
+    @Schema(
+            description = "CGPA",
+            example = "8.5"
+    )
     @NotNull(message = "CGPA is required")
-    @DecimalMin(value = "0.0", message = "Cannot be less than 0")
-    @DecimalMax(value = "10.0", message = "Cannot be greater than 10")
+    @DecimalMin(value = "0.0", message = "CGPA cannot be less than 0")
+    @DecimalMax(value = "10.0", message = "CGPA cannot be greater than 10")
     private Double cgpa;
 
+    @Schema(
+            description = "Library Card ID",
+            example = "1"
+    )
     @NotNull(message = "Library Card ID is required")
-    @Min(value = 0, message = "Library Card ID cannot be negative")
+    @Min(value = 1, message = "Library Card ID cannot be less than 1")
     private Integer libraryCardId;
 
+    @Schema(
+            description = "Number of Issued Books",
+            example = "3"
+    )
     @NotNull(message = "Issued books count is required")
     @Min(value = 0, message = "Issued books cannot be negative")
     private Integer issuedBooks;
