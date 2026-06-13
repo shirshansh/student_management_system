@@ -1,8 +1,6 @@
 package com.studentmanagement.controller;
 
-import com.studentmanagement.dto.StudentPageResponseDto;
-import com.studentmanagement.dto.StudentRequestDto;
-import com.studentmanagement.dto.StudentResponseDto;
+import com.studentmanagement.dto.*;
 import com.studentmanagement.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
@@ -55,7 +53,7 @@ public class StudentController {
 
     // POST /api/students
     @PostMapping
-    public ResponseEntity<StudentResponseDto> saveStudent(@Valid @RequestBody StudentRequestDto studentRequestDto) {
+    public ResponseEntity<StudentResponseDto> saveStudent(@Valid @RequestBody CreateStudentRequestDto studentRequestDto) {
 
         StudentResponseDto savedStudentResponseDto = studentService.save(studentRequestDto);
 
@@ -66,9 +64,9 @@ public class StudentController {
     @PutMapping("/{id}")
     public ResponseEntity<StudentResponseDto> updateStudent(
             @PathVariable Integer id,
-            @Valid @RequestBody StudentRequestDto studentRequestDto) {
+            @Valid @RequestBody UpdateStudentRequestDto updateStudentRequestDto) {
 
-        StudentResponseDto updatedStudentResponseDto = studentService.updateStudent(id, studentRequestDto);
+        StudentResponseDto updatedStudentResponseDto = studentService.updateStudent(id, updateStudentRequestDto);
 
         return ResponseEntity.ok(updatedStudentResponseDto);
     }
@@ -91,11 +89,11 @@ public class StudentController {
         return ResponseEntity.ok(studentResponseDto);
     }
 
-    // GET /api/students/department/{department}
-    @GetMapping("/department/{department}")
-    public ResponseEntity<List<StudentResponseDto>> getStudentsByDepartment(@PathVariable String department) {
+    // GET /api/students/departmentId/{departmentId}
+    @GetMapping("/departmentId/{departmentId}")
+    public ResponseEntity<List<StudentResponseDto>> getStudentsByDepartment(@PathVariable Integer departmentId) {
 
-        List<StudentResponseDto> students = studentService.findByDepartment(department);
+        List<StudentResponseDto> students = studentService.findByDepartment(departmentId);
 
         return ResponseEntity.ok(students);
     }
@@ -118,12 +116,21 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
 
-    // GET /api/students/filter?department={department}&cgpa={cgpa}
+    // GET /api/students/filter?departmentId={departmentId}&cgpa={cgpa}
     @GetMapping("/filter")
-    public ResponseEntity<List<StudentResponseDto>> getStudentsByFilter(@RequestParam String department, @RequestParam Double cgpa) {
+    public ResponseEntity<List<StudentResponseDto>> getStudentsByFilter(@RequestParam Integer departmentId, @RequestParam Double cgpa) {
 
-        List<StudentResponseDto> students = studentService.findByDepartmentAndCgpaGreaterThan(department, cgpa);
+        List<StudentResponseDto> students = studentService.findByDepartmentAndCgpaGreaterThan(departmentId, cgpa);
 
         return ResponseEntity.ok(students);
+    }
+
+    // GET /api/students/libraryCard?student={studentId}
+    @GetMapping("/libraryCard")
+    public ResponseEntity<LibraryCardResponse> getLibraryCard(@RequestParam Integer studentId) {
+
+        LibraryCardResponse libraryCard = studentService.findLibraryCard(studentId);
+
+        return ResponseEntity.ok(libraryCard);
     }
 }

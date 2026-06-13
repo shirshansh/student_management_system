@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleException(StudentNotFoundException exc) {
+    @ExceptionHandler({
+            StudentNotFoundException.class,
+            DepartmentNotFoundException.class,
+            LibraryCardNotFoundException.class
+    })
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
 
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
