@@ -36,16 +36,17 @@ public class Student {
 
     }
 
-    public Student(String firstName, String lastName, String email, Department department, Double cgpa) {
+    public Student(String firstName, String lastName, String email, Department department, Double cgpa, LibraryCard libraryCard) {
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.department = department;
         this.cgpa = cgpa;
+        this.libraryCard = libraryCard;
     }
 
-    public Student(Integer id, String firstName, String lastName, String email, Department department, Double cgpa) {
+    public Student(Integer id, String firstName, String lastName, String email, Department department, Double cgpa, LibraryCard libraryCard) {
 
         this.id = id;
         this.firstName = firstName;
@@ -53,6 +54,7 @@ public class Student {
         this.email = email;
         this.department = department;
         this.cgpa = cgpa;
+        this.libraryCard = libraryCard;
     }
 
     public void assignLibraryCard(LibraryCard libraryCard) {

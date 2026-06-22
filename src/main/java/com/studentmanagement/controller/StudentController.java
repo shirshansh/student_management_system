@@ -1,6 +1,9 @@
 package com.studentmanagement.controller;
 
-import com.studentmanagement.dto.*;
+import com.studentmanagement.dto.LibraryCardResponse;
+import com.studentmanagement.dto.StudentPageResponseDto;
+import com.studentmanagement.dto.StudentRequestDto;
+import com.studentmanagement.dto.StudentResponseDto;
 import com.studentmanagement.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,7 +74,7 @@ public class StudentController {
             summary = "Save new Student",
             description = "Returns the Student after saving"
     )
-    public ResponseEntity<StudentResponseDto> saveStudent(@Valid @RequestBody CreateStudentRequestDto studentRequestDto) {
+    public ResponseEntity<StudentResponseDto> saveStudent(@Valid @RequestBody StudentRequestDto studentRequestDto) {
 
         StudentResponseDto savedStudentResponseDto = studentService.save(studentRequestDto);
 
@@ -86,9 +89,9 @@ public class StudentController {
     )
     public ResponseEntity<StudentResponseDto> updateStudent(
             @PathVariable Integer id,
-            @Valid @RequestBody UpdateStudentRequestDto updateStudentRequestDto) {
+            @Valid @RequestBody StudentRequestDto studentRequestDto) {
 
-        StudentResponseDto updatedStudentResponseDto = studentService.updateStudent(id, updateStudentRequestDto);
+        StudentResponseDto updatedStudentResponseDto = studentService.updateStudent(id, studentRequestDto);
 
         return ResponseEntity.ok(updatedStudentResponseDto);
     }

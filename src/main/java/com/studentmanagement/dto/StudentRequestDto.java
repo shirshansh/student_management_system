@@ -3,8 +3,8 @@ package com.studentmanagement.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 
-@Schema(description = "Student Creation Request")
-public class CreateStudentRequestDto {
+@Schema(description = "Student Request")
+public class StudentRequestDto {
 
     @Schema(
             description = "First name",
@@ -53,11 +53,11 @@ public class CreateStudentRequestDto {
     @Min(value = 0, message = "Issued books cannot be negative")
     private Integer issuedBooks;
 
-    public CreateStudentRequestDto() {
+    public StudentRequestDto() {
 
     }
 
-    public CreateStudentRequestDto(String firstName, String lastName, String email, Integer departmentId, Double cgpa, Integer issuedBooks) {
+    public StudentRequestDto(String firstName, String lastName, String email, Integer departmentId, Double cgpa, Integer issuedBooks) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -130,7 +130,7 @@ public class CreateStudentRequestDto {
     @Override
     public String toString() {
 
-        return "UpdateStudentRequestDto{" +
+        return "StudentRequestDto{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

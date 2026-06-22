@@ -1,6 +1,9 @@
 package com.studentmanagement.service;
 
-import com.studentmanagement.dto.*;
+import com.studentmanagement.dto.LibraryCardResponse;
+import com.studentmanagement.dto.StudentPageResponseDto;
+import com.studentmanagement.dto.StudentRequestDto;
+import com.studentmanagement.dto.StudentResponseDto;
 import com.studentmanagement.entity.Department;
 import com.studentmanagement.entity.LibraryCard;
 import com.studentmanagement.entity.Student;
@@ -50,30 +53,16 @@ public class StudentService {
         this.libraryCardRepository = libraryCardRepository;
     }
 
-    private Student convertToEntity(CreateStudentRequestDto createStudentRequestDto) {
+    private Student convertToEntity(StudentRequestDto studentRequestDto) {
 
         Student student = new Student();
 
-        student.setFirstName(createStudentRequestDto.getFirstName());
-        student.setLastName(createStudentRequestDto.getLastName());
-        student.setEmail(createStudentRequestDto.getEmail());
-        student.setDepartment(getDepartmentById(createStudentRequestDto.getDepartmentId()));
-        student.setCgpa(createStudentRequestDto.getCgpa());
-        student.assignLibraryCard(new LibraryCard(createStudentRequestDto.getIssuedBooks()));
-
-        return student;
-    }
-
-    private Student convertToEntity(UpdateStudentRequestDto updateStudentRequestDto) {
-
-        Student student = new Student();
-
-        student.setFirstName(updateStudentRequestDto.getFirstName());
-        student.setLastName(updateStudentRequestDto.getLastName());
-        student.setEmail(updateStudentRequestDto.getEmail());
-        student.setDepartment(getDepartmentById(updateStudentRequestDto.getDepartmentId()));
-        student.setCgpa(updateStudentRequestDto.getCgpa());
-        student.assignLibraryCard(getLibraryCardById(updateStudentRequestDto.getLibraryCardId()));
+        student.setFirstName(studentRequestDto.getFirstName());
+        student.setLastName(studentRequestDto.getLastName());
+        student.setEmail(studentRequestDto.getEmail());
+        student.setDepartment(getDepartmentById(studentRequestDto.getDepartmentId()));
+        student.setCgpa(studentRequestDto.getCgpa());
+        student.assignLibraryCard(new LibraryCard(studentRequestDto.getIssuedBooks()));
 
         return student;
     }
@@ -162,21 +151,21 @@ public class StudentService {
         return convertToResponseDto(getStudentById(id));
     }
 
-    public StudentResponseDto updateStudent(Integer id, UpdateStudentRequestDto updatedUpdateStudentRequestDto) {
+    public StudentResponseDto updateStudent(Integer id, StudentRequestDto studentRequestDto) {
 
         Student existingStudent = getStudentById(id);
 
-        existingStudent.setFirstName(updatedUpdateStudentRequestDto.getFirstName());
-        existingStudent.setLastName(updatedUpdateStudentRequestDto.getLastName());
-        existingStudent.setEmail(updatedUpdateStudentRequestDto.getEmail());
-        existingStudent.setDepartment(getDepartmentById(updatedUpdateStudentRequestDto.getDepartmentId()));
-        existingStudent.setCgpa(updatedUpdateStudentRequestDto.getCgpa());
-        existingStudent.getLibraryCard().setIssuedBooks(updatedUpdateStudentRequestDto.getIssuedBooks());
+        existingStudent.setFirstName(studentRequestDto.getFirstName());
+        existingStudent.setLastName(studentRequestDto.getLastName());
+        existingStudent.setEmail(studentRequestDto.getEmail());
+        existingStudent.setDepartment(getDepartmentById(studentRequestDto.getDepartmentId()));
+        existingStudent.setCgpa(studentRequestDto.getCgpa());
+        existingStudent.getLibraryCard().setIssuedBooks(studentRequestDto.getIssuedBooks());
 
         return convertToResponseDto(studentRepository.save(existingStudent));
     }
 
-    public StudentResponseDto save(CreateStudentRequestDto requestDto) {
+    public StudentResponseDto save(StudentRequestDto requestDto) {
 
         Student student = convertToEntity(requestDto);
 
