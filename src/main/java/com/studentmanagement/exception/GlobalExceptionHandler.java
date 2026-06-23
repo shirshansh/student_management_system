@@ -11,7 +11,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             StudentNotFoundException.class,
             DepartmentNotFoundException.class,
-            LibraryCardNotFoundException.class
+            LibraryCardNotFoundException.class,
+            UsernameNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleException(RuntimeException exc) {
 
