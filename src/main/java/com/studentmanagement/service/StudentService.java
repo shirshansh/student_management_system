@@ -1,6 +1,6 @@
 package com.studentmanagement.service;
 
-import com.studentmanagement.dto.LibraryCardResponse;
+import com.studentmanagement.dto.LibraryCardResponseDto;
 import com.studentmanagement.dto.StudentPageResponseDto;
 import com.studentmanagement.dto.StudentRequestDto;
 import com.studentmanagement.dto.StudentResponseDto;
@@ -82,16 +82,16 @@ public class StudentService {
         return studentResponseDto;
     }
 
-    private LibraryCardResponse convertToResponseDto(Student student, LibraryCard libraryCard) {
+    private LibraryCardResponseDto convertToResponseDto(Student student, LibraryCard libraryCard) {
 
-        LibraryCardResponse libraryCardResponse = new LibraryCardResponse();
+        LibraryCardResponseDto libraryCardResponseDto = new LibraryCardResponseDto();
 
-        libraryCardResponse.setFirstName(student.getFirstName());
-        libraryCardResponse.setLastName(student.getLastName());
-        libraryCardResponse.setLibraryCardId(libraryCard.getId());
-        libraryCardResponse.setIssuedBooks(libraryCard.getIssuedBooks());
+        libraryCardResponseDto.setFirstName(student.getFirstName());
+        libraryCardResponseDto.setLastName(student.getLastName());
+        libraryCardResponseDto.setLibraryCardId(libraryCard.getId());
+        libraryCardResponseDto.setIssuedBooks(libraryCard.getIssuedBooks());
 
-        return libraryCardResponse;
+        return libraryCardResponseDto;
     }
 
     private Student getStudentById(Integer id) {
@@ -234,7 +234,7 @@ public class StudentService {
                 .toList();
     }
 
-    public LibraryCardResponse findLibraryCard(Integer studentId) {
+    public LibraryCardResponseDto findLibraryCard(Integer studentId) {
 
         Student student = getStudentById(studentId);
 

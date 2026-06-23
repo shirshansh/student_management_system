@@ -1,6 +1,6 @@
 package com.studentmanagement.controller;
 
-import com.studentmanagement.dto.LibraryCardResponse;
+import com.studentmanagement.dto.LibraryCardResponseDto;
 import com.studentmanagement.dto.StudentPageResponseDto;
 import com.studentmanagement.dto.StudentRequestDto;
 import com.studentmanagement.dto.StudentResponseDto;
@@ -180,9 +180,9 @@ public class StudentController {
             summary = "Get Library Card by Student ID",
             description = "Returns the Library Card information for the given Student ID"
     )
-    public ResponseEntity<LibraryCardResponse> getLibraryCard(@RequestParam Integer studentId) {
+    public ResponseEntity<LibraryCardResponseDto> getLibraryCard(@RequestParam Integer studentId) {
 
-        LibraryCardResponse libraryCard = studentService.findLibraryCard(studentId);
+        LibraryCardResponseDto libraryCard = studentService.findLibraryCard(studentId);
 
         return ResponseEntity.ok(libraryCard);
     }

@@ -3,7 +3,7 @@ package com.studentmanagement.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Library Card Response")
-public class LibraryCardResponse {
+public class LibraryCardResponseDto {
 
     @Schema(
             description = "First Name",
@@ -29,11 +29,11 @@ public class LibraryCardResponse {
     )
     private Integer issuedBooks;
 
-    public LibraryCardResponse() {
+    public LibraryCardResponseDto() {
 
     }
 
-    public LibraryCardResponse(String firstName, String lastName, Integer libraryCardId, Integer issuedBooks) {
+    public LibraryCardResponseDto(String firstName, String lastName, Integer libraryCardId, Integer issuedBooks) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -84,7 +84,7 @@ public class LibraryCardResponse {
     @Override
     public String toString() {
 
-        return "LibraryCardResponse{" +
+        return "LibraryCardResponseDto{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", libraryCardId=" + libraryCardId +
