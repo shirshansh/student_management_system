@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -115,6 +116,7 @@ public class StudentService {
                 .orElseThrow(() -> new LibraryCardNotFoundException("Library Card with id = " + id + " not found"));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public StudentPageResponseDto findAll(int page, int size, String sortBy, Sort.Direction sortOrder) {
 
         if (!ALLOWED_SORT_FIELDS.contains(sortBy)) {
@@ -146,11 +148,13 @@ public class StudentService {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public StudentResponseDto findById(Integer id) {
 
         return convertToResponseDto(getStudentById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public StudentResponseDto updateStudent(Integer id, StudentRequestDto studentRequestDto) {
 
         Student existingStudent = getStudentById(id);
@@ -165,6 +169,7 @@ public class StudentService {
         return convertToResponseDto(studentRepository.save(existingStudent));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public StudentResponseDto save(StudentRequestDto requestDto) {
 
         Student student = convertToEntity(requestDto);
@@ -174,6 +179,7 @@ public class StudentService {
         return convertToResponseDto(savedStudent);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteById(Integer id) {
 
         Student student = getStudentById(id);
@@ -181,6 +187,7 @@ public class StudentService {
         studentRepository.delete(student);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public StudentResponseDto findByEmail(String email) {
 
         Student student = studentRepository
@@ -190,6 +197,7 @@ public class StudentService {
         return convertToResponseDto(student);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<StudentResponseDto> findByDepartment(Integer departmentId) {
 
         return studentRepository
@@ -199,6 +207,7 @@ public class StudentService {
                 .toList();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<StudentResponseDto> searchByFirstName(String keyword) {
 
         return studentRepository
@@ -208,6 +217,7 @@ public class StudentService {
                 .toList();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<StudentResponseDto> findByCgpa(String comparator, Double cgpa) {
 
         comparator = comparator.toLowerCase();
@@ -225,6 +235,7 @@ public class StudentService {
                 .toList();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<StudentResponseDto> findByDepartmentAndCgpaGreaterThan(Integer departmentId, Double cgpa) {
 
         return studentRepository
@@ -234,6 +245,7 @@ public class StudentService {
                 .toList();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public LibraryCardResponseDto findLibraryCard(Integer studentId) {
 
         Student student = getStudentById(studentId);
